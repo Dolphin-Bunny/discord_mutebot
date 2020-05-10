@@ -10,6 +10,14 @@ A basic bot for discord that has timed and infinite mutes.
 
 3. paste the contents of replit.py (*not main.py*) from github into main.py on the repl
 
+3.5. change lines 1, 2, and 3 to have the name of the member role and the muted role in the quotes
+
+3.6. create a file called `.env` on repl.it
+
+3.7. paste `TOKEN=` ninto the .env file on the first line
+
+3.8. paste your bot token after the `=`
+
 4. click `run` at the top of the screen on your repl
 
 5. after stuff installs onto the repl, there should be a white box on the right of the screen. copy the url that is at the top of the white box (it should be something like `something--yourusername.repl.co`)
