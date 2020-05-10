@@ -6,7 +6,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 1. create an account on repl.it and uptime robot (the free accounts are fine)
 
-2. on repl.it create a new python repl
+2. on repl.it create a new python (not python 2) repl
 
 3. paste the contents of replit.py (*not main.py*) from github into main.py on the repl
 
