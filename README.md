@@ -26,7 +26,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 6. on uptimerobot, create a new http(s) monitor, and paste the url you copied into the URL box
 
-7. add `https://` at the start of the url in the url box (it should look something like `https://something--yourreplitusername.repl.co`, not `https://http:///something--yourreplitusername.repl.co`)
+7. mae sure that the url is something like `https://something--yourrepllitusername.repl.co` and not `http://https://something--yourrepllitusername..repl.co`
 
 8. assign the monitor a "Friendly name" if you want
 
