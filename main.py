@@ -1,6 +1,6 @@
-memberrolename='NAME OF MEMBER ROLE'
-muterolename='NAME OF MUTED ROLE'
-BOT_TOKEN = 'BOT TOKEN GOES HERE'
+memberrolename='member'
+muterolename='m'
+TOKEN='your token goes here'
 
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions
@@ -46,9 +46,9 @@ async def mute(ctx, user: str, mtime: int):
     if ctx.message.author.guild_permissions.administrator:
         if db.search(query.id == (str(member.id)+' '+str(member.guild.id))) == []:
    
-            await ctx.send(embed=discord.Embed(title=member.name+' was muted for '+str(mtime)+' seconds',color=0x00FF00))
+            await ctx.send(embed=discord.Embed(title=member.name+' was muted for '+str(mtime)+' minutes',color=0x00FF00))
 
-            db.insert({'id':(str(member.id)+' '+str(member.guild.id)), 'expires':time.time()+mtime})
+            db.insert({'id':(str(member.id)+' '+str(member.guild.id)), 'expires':time.time()+(mtime*60)})
             print('db record inserted')
 
             await member.add_roles(mute_role)
@@ -56,8 +56,8 @@ async def mute(ctx, user: str, mtime: int):
             print('changed roles')
 
             if mtime>0:
-                print('beginning asyncio.sleep('+str(mtime)+')')
-                await asyncio.sleep(mtime)
+                print('beginning asyncio.sleep('+str(mtime*60)+')')
+                await asyncio.sleep(mtime*60)
                 print('waited successfully')
                 if not member_role in member.roles:
                     await member.add_roles(member_role)
@@ -100,7 +100,6 @@ async def help(ctx):
     embed.add_field(name='`!help`',value='displays this help message',inline=False)
     await ctx.send(embed=embed)
 
-
-bot.run(BOT_TOKEN, bot=True, reconnect=True)
+bot.run(TOKEN, bot=True, reconnect=True)
 
 #NOTE: if the bot goes offline ever, anyone who is muted will stay muted until unmuted manually or bot comes back online
