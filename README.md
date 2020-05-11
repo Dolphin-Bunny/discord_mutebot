@@ -14,7 +14,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 3.5. change lines 1 and 2 to have the name of the member role and the muted role in the quotes 
      it should say
-`memberrolename='name of your member role'`
+`memberrolename='name of your member role'`  
 `muterolename='name of your muted role'`
 
 3.6. create a file called `.env` on repl.it
