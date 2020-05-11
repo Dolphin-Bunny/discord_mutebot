@@ -12,7 +12,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 3. paste the contents of replit.py (*not main.py*) from github into main.py on the repl
 
-3.5. change lines 1, 2, and 3 to have the name of the member role and the muted role in the quotes
+3.5. change lines 1 and 2 to have the name of the member role and the muted role in the quotes
 
 3.6. create a file called `.env` on repl.it
 
