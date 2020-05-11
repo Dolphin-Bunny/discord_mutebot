@@ -19,7 +19,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 3.6. create a file called `.env` on repl.it
 
-3.7. paste `TOKEN=` ninto the .env file on the first line
+3.7. paste `TOKEN=` into the .env file on the first line
 
 3.8. paste your bot token after the `=`
 
