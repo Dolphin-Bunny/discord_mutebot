@@ -38,7 +38,7 @@ async def on_ready():
         db.remove(query.id==(str(member.id)+' '+str(server.id)))
     
 @bot.command()
-async def mute(ctx, user: str, mtime: int):
+async def mute(ctx, user: str, mtime: float):
     member = ctx.message.mentions[0]
     mute_role = discord.utils.get(member.guild.roles, name=muterolename)
     member_role = discord.utils.get(member.guild.roles, name=memberrolename)
