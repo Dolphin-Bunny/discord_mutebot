@@ -38,7 +38,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 10. click `create monitor` on uptimerobot
 
-10.5. go back to your repl, and cllickk `restart` or `start`
+10.5. go back to your repl, and click `restart` or `start`
 
 11. the bots I made that are hosted this way have over 99% uptime, and they automatically start again after going down
 
