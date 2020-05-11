@@ -5,6 +5,7 @@ A basic bot for discord that has timed and infinite mutes.
 
 ### Instructions for use
 #### (this assumes you are using [repl.it](https://repl.it/) and [uptimerobot](https://uptimerobot.com/login?rt=https://uptimerobot.com/dashboard#) )
+#### You will first need to [create a bot application]() on the [developer dashboard](https://discord.com/developers/applications), add it to your discord server, and make it an administrator
 
 1. create an account on repl.it and uptime robot (the free accounts are fine)
 
