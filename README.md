@@ -41,3 +41,13 @@ A basic bot for discord that has timed and infinite mutes.
 10.5. go back to your repl, and cllickk `restart` or `start`
 
 11. the bots I made that are hosted this way have over 99% uptime, and they automatically start again after going down
+
+
+## commands
+`!mute @user minutes` mutes the specified user for the specified number of minutes. If minutes is 0, the user will be muted indefinitely
+Example `!mute @someone 10`
+
+`!unmute @user` unmutes the specified user, even if they are already muted. Does nothing if they aren't muted
+Example `!unmute @someone`
+
+`!help` displays a help message with a list of commands
