@@ -1,5 +1,6 @@
 memberrolename='member'
-muterolename='m'
+muterolename='muted'
+moderatorrolename='moderator'
 
 from discord.ext import commands
 import discord
@@ -46,28 +47,36 @@ async def on_ready():
         mute_role = discord.utils.get(member.guild.roles, name=muterolename)
         member_role = discord.utils.get(member.guild.roles, name=memberrolename)
 
+        if mute_role in member.roles:
+            await member.remove_roles(mute_role,reason='the bot went offline, so its unmuting everyone who was muted to make sure nobody gets stuck muted forever')
+
         if not member_role in member.roles:
             await member.add_roles(member_role)
-        if mute_role in member.roles:
-            await member.remove_roles(mute_role)
+        
 
         db.remove(query.id==(str(member.id)+' '+str(server.id)))
     
 @bot.command()
 async def mute(ctx, user: str, mtime: float):
     member = ctx.message.mentions[0]
+    if mtime>0:
+      mutereason=member.name+' was muted by '+ctx.message.author.name+' for '+str(mtime)+' minutes'
+    else:
+      mutereason=member.name+' was muted indefinetly by '+ctx.message.author.name
+    
     mute_role = discord.utils.get(member.guild.roles, name=muterolename)
     member_role = discord.utils.get(member.guild.roles, name=memberrolename)
+    mod_role = discord.utils.get(member.guild.roles, name=moderatorrolename)
 
-    if ctx.message.author.guild_permissions.administrator:
-        if db.search(query.id == (str(member.id)+' '+str(member.guild.id))) == []:
+    if ctx.message.author.guild_permissions.administrator or mod_role in ctx.message.author.roles:
+        if db.search(query.id == (str(member.id)+' '+str(member.guild.id))) == [] and (not (member.guild_permissions.administrator or mod_role in member.roles)):
    
             await ctx.send(embed=discord.Embed(title=member.name+' was muted for '+str(mtime)+' minutes',color=0x00FF00))
 
             db.insert({'id':(str(member.id)+' '+str(member.guild.id)), 'expires':time.time()+(mtime*60)})
             print('[mute] db record inserted')
 
-            await member.add_roles(mute_role)
+            await member.add_roles(mute_role,reason=mutereason)
             await member.remove_roles(member_role)
             print('[mute] changed roles')
 
@@ -75,35 +84,42 @@ async def mute(ctx, user: str, mtime: float):
                 print('[mute] beginning asyncio.sleep('+str(mtime*60)+')')
                 await asyncio.sleep(mtime*60)
                 print('[mute] waited successfully')
+                if mute_role in member.roles:
+                    await member.remove_roles(mute_role,reason='Their mute expired')
                 if not member_role in member.roles:
                     await member.add_roles(member_role)
-                if mute_role in member.roles:
-                    await member.remove_roles(mute_role)
+            
             print('[mute] gave back roles')
             if db.search(query.id==(str(member.id)+' '+str(member.guild.id))) != []:
                 await ctx.send(embed=discord.Embed(title=member.name+'\'s mute has expired',color=0x00FF00))
             db.remove(query.id==(str(member.id)+' '+str(member.guild.id)))
             print('[mute] db record removed')
         else:
-            await ctx.send(embed=discord.Embed(title=member.name+' could not be muted, because they are already muted. You can use `!unmute @user` to unmute them, so you can mute them again',color=0x00FF00))
+          if member.guild_permissions.administrator or mod_role in member.roles:
+            await ctx.send(embed=discord.Embed(title=member.name+' could not be muted, because they are an administrator or have the role `'+moderatorrolename+'`',color=0xFF0000))
+          else:
+            await ctx.send(embed=discord.Embed(title=member.name+' could not be muted, because they are already muted. You can use `!unmute @user` to unmute them, so you can mute them again',color=0xFF0000))
     else:
-        await ctx.send(embed=discord.Embed(title='You must be an administrator to use this command',color=0xFF0000))
+        await ctx.send(embed=discord.Embed(title='You must be an administrator or have the role of `'+moderatorrolename+'` to use this command',color=0xFF0000))
 
 @bot.command()
 async def unmute(ctx,user: str):
-    if ctx.message.author.guild_permissions.administrator:
-        member=ctx.message.mentions[0]
+    member=ctx.message.mentions[0]
+    mod_role = discord.utils.get(member.guild.roles, name=moderatorrolename)
+    if ctx.message.author.guild_permissions.administrator or mod_role in ctx.message.author.roles:
+        
         mute_role = discord.utils.get(member.guild.roles, name=muterolename)
         member_role = discord.utils.get(member.guild.roles, name=memberrolename)
+        
         if not member_role in member.roles:
             await member.add_roles(member_role)
         if mute_role in member.roles:
-            await member.remove_roles(mute_role)
+            await member.remove_roles(mute_role,reason=member.name+' was unmuted by '+ctx.message.author.name)
         db.remove(query.id==(str(member.id)+' '+str(member.guild.id)))
         print('[unmute] db record removed')
         await ctx.send(embed=discord.Embed(title=member.name+' was unmuted',color=0x00FF00))
     else:
-        await ctx.send(embed=discord.Embed(title='You must be an administrator to use this command',color=0xFF0000))
+        await ctx.send(embed=discord.Embed(title='You must be an administrator or have the role of `'+moderatorrolename+'` to use this command',color=0xFF0000))
 
 @bot.command()
 async def help(ctx):
